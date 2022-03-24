@@ -25,7 +25,6 @@ export class UserMessageResolver {
 
   @Subscription(() => UserMessage)
   sendMessageNotification() {
-    console.log('dkddjdjj');
     return pubSub.asyncIterator('sendMessageNotification');
   }
 
@@ -43,7 +42,7 @@ export class UserMessageResolver {
     @Args('MyMessagesWithUser')
     MyMessagesWithUser: MyMessagesWithUser,
   ) {
-    this.userMessageService.findAll(MyMessagesWithUser);
+    return this.userMessageService.findAll(MyMessagesWithUser);
   }
 
   @Mutation(() => Boolean)

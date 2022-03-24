@@ -23,12 +23,6 @@ export class UserMessageService {
 
   async findAll(MyconversationWithUser) {
     return await this.userMessage.findAll({
-      include: [
-        {
-          model: ConversationModel,
-          as: 'conversation',
-        },
-      ],
       where: {
         [Op.or]: [
           {
