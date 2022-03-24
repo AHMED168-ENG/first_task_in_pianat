@@ -23,7 +23,9 @@ const pubSub = new PubSub();
 export class UserMessageResolver {
   constructor(private readonly userMessageService: UserMessageService) {}
 
-  @Subscription(() => UserMessage)
+  @Subscription(() => UserMessage, {
+    filter: (payload, vatiabols) => payload.To == vatiabols.frindId,
+  })
   sendMessageNotification() {
     return pubSub.asyncIterator('sendMessageNotification');
   }
