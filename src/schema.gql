@@ -1,0 +1,112 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ConversationModel {
+  id: String!
+  From: String!
+  To: String!
+  hasShourtcut: Boolean
+  FromMessage: [UserMessage!]!
+  conversation_user_from: User!
+  conversation_user_to: User!
+}
+
+type UserMessage {
+  id: String!
+  message: String!
+  from: String!
+  to: String!
+  isSeen: Boolean!
+  conversation: ConversationModel!
+}
+
+type User {
+  """id"""
+  id: String!
+  name: String!
+  email: String!
+  password: String!
+  age: Int
+  addres: String
+  roles: String
+  isAdmin: Boolean
+  isActive: Boolean
+  user_message_from: [UserMessage!]!
+}
+
+type Query {
+  findAllUser: [User!]!
+  findUser(id: String!): User!
+  findUserByEmail(email: String!): User!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!, id: String!): Boolean!
+  removeUser(id: String!): Boolean!
+  activeUser(id: String!): String!
+  mackUserAdmin(id: String!): Boolean!
+  signInUser(signInUserInput: SignInUserInput!): String!
+  signUpUser(signUpUserInput: CreateUserInput!): User!
+  resetPassword(resetPasswordInput: ResetPassword!): Boolean!
+  createConversation(createConversationInput: CreateConversationInput!): Boolean!
+  findAllConversationWithUserWithLastMessage(From: String!): [ConversationModel!]!
+  removeConversation(id: String!): ConversationModel!
+  createUserMessage(createUserMessageInput: CreateUserMessageInput!): UserMessage!
+  findAllUserMessage(MyMessagesWithUser: MyMessagesWithUser!): [UserMessage!]!
+  updateUserMessage(id: String!, updateUserMessageInput: UpdateUserMessageInput!): Boolean!
+  removeUserMessage(id: String!): Boolean!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+  age: Int
+  addres: String
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  age: Int
+  addres: String
+}
+
+input SignInUserInput {
+  email: String!
+  password: String!
+  signAll: Boolean!
+}
+
+input ResetPassword {
+  email: String!
+  password: String!
+  newPassword: String!
+}
+
+input CreateConversationInput {
+  From: String!
+  To: String!
+}
+
+input CreateUserMessageInput {
+  message: String!
+  from: String!
+  to: String!
+}
+
+input MyMessagesWithUser {
+  from: String!
+  to: String!
+  order: String!
+}
+
+input UpdateUserMessageInput {
+  message: String!
+}
+
+type Subscription {
+  sendMessageNotification: UserMessage!
+}
