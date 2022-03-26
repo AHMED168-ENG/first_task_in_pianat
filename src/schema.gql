@@ -108,5 +108,5 @@ input UpdateUserMessageInput {
 }
 
 type Subscription {
-  sendMessageNotification: UserMessage!
+  sendMessageNotification(frindId: String!): UserMessage!
 }

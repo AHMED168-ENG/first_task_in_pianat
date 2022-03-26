@@ -18,27 +18,31 @@ import { Roles } from 'src/modul.exports/Roles';
 import { PubSub } from 'graphql-subscriptions';
 const pubSub = new PubSub();
 
-@UseGuards(GqlAuthGuard)
 @Resolver(() => UserMessage)
 export class UserMessageResolver {
   constructor(private readonly userMessageService: UserMessageService) {}
-
-  @Subscription(() => UserMessage, {
-    filter: (payload, vatiabols) => payload.To == vatiabols.frindId,
-  })
-  sendMessageNotification() {
-    return pubSub.asyncIterator('sendMessageNotification');
-  }
-
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => UserMessage)
-  createUserMessage(
+  async createUserMessage(
     @Args('createUserMessageInput')
     createUserMessageInput: CreateUserMessageInput,
   ): Promise<UserMessage> {
-    pubSub.publish('sendMessageNotification', createUserMessageInput); // علشان اعمل emit لايفنت معين موجود في clint side
-    return this.userMessageService.create(createUserMessageInput);
+    var message = await this.userMessageService.create(createUserMessageInput);
+    pubSub.publish('sendMessageNotification', {
+      sendMessageNotification: message,
+    }); // علشان اعمل emit لايفنت معين موجود في clint side
+    return message;
   }
 
+  @Subscription((returns) => UserMessage, {
+    filter: (payload, vatiabols) =>
+      payload.sendMessageNotification.to === vatiabols.frindId,
+  })
+  sendMessageNotification(@Args('frindId') frindId: string) {
+    return pubSub.asyncIterator('sendMessageNotification');
+  }
+
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => [UserMessage], { name: 'findAllUserMessage' })
   findAllUserMessage(
     @Args('MyMessagesWithUser')
@@ -47,6 +51,7 @@ export class UserMessageResolver {
     return this.userMessageService.findAll(MyMessagesWithUser);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
   updateUserMessage(
     @Args('id') id: string,
@@ -59,6 +64,7 @@ export class UserMessageResolver {
     );
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
   removeUserMessage(@Args('id') id: string): Promise<boolean> {
     return this.userMessageService.removeUserMessage(id);
