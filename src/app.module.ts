@@ -12,6 +12,11 @@ import { RolesGuard } from './modul.exports/role.guard';
 import { ConversationModule } from './conversation/conversation.module';
 import { UserMessageModule } from './user-message/user-message.module';
 import { MailModule } from './mail/mail.module';
+import { UserRequestModule } from './user-request/user-request.module';
+import { UserFrindsModule } from './user-frinds/user-frinds.module';
+import { PostModule } from './post/post.module';
+import { CommentsModule } from './comments/comments.module';
+import { PostReactionModule } from './post-reaction/post-reaction.module';
 
 @Module({
   imports: [
@@ -24,6 +29,11 @@ import { MailModule } from './mail/mail.module';
     ConversationModule,
     UserMessageModule,
     MailModule,
+    UserRequestModule,
+    UserFrindsModule,
+    PostModule,
+    CommentsModule,
+    PostReactionModule,
   ],
   providers: [
     {

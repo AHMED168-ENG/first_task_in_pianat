@@ -35,10 +35,64 @@ type User {
   user_message_from: [UserMessage!]!
 }
 
+type UserFrind {
+  id: String!
+  userId: String!
+  frindesId: String!
+  date: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type UserRequest {
+  id: String!
+  to: String!
+  from: String!
+  date: DateTime!
+  isSeen: Boolean!
+}
+
+type Comments {
+  id: String!
+  comment: String!
+  userId: String!
+  postId: String!
+  commentPost: [Posts!]!
+}
+
+type Posts {
+  id: String!
+  userId: String!
+  post: String!
+  image: String!
+  video: String!
+  postComments: [Comments!]!
+}
+
+type PostReaction {
+  id: String!
+  postId: String!
+  usersId: String!
+  types: String!
+  createAtLikes: String!
+}
+
 type Query {
   findAllUser: [User!]!
   findUser(id: String!): User!
   findUserByEmail(email: String!): User!
+  findrequestThatSeen(to: String!): [User!]!
+  findrequestUsers(to: String!): [User!]!
+  userRequest(id: String!): UserRequest!
+  findAllFrindes(userId: String!): [User!]!
+  userFrind(userId: String!): UserFrind!
+  findAllPosts: [Posts!]!
+  findpost(userId: String!): Posts!
+  FindAllComments(userId: String!, offset: Float!): [Comments!]!
+  postReaction(userId: String!): PostReaction!
 }
 
 type Mutation {
@@ -57,6 +111,18 @@ type Mutation {
   findAllUserMessage(MyMessagesWithUser: MyMessagesWithUser!): [UserMessage!]!
   updateUserMessage(id: String!, updateUserMessageInput: UpdateUserMessageInput!): Boolean!
   removeUserMessage(id: String!): Boolean!
+  requestOperation(createUserRequestInput: operation_request_input!): String!
+  acceptRequest(operation_Frindes: operation_request_input!): String!
+  changeSeenRequest(to: String!): String!
+  createPost(createPostInput: CreatePostInput!): Posts!
+  updatePost(updatePostInput: UpdatePostInput!): Boolean!
+  removePost(userId: String!): Boolean!
+  createComment(createCommentInput: CreateCommentInput!): Comments!
+  updateComment(updateCommentInput: UpdateCommentInput!): Boolean!
+  removeComment(id: String!): Boolean!
+  createPostReaction(createPostReactionInput: CreatePostReactionInput!): PostReaction!
+  updatePostReaction(updatePostReactionInput: UpdatePostReactionInput!): PostReaction!
+  removePostReaction(postId: String!): PostReaction!
 }
 
 input CreateUserInput {
@@ -107,6 +173,53 @@ input UpdateUserMessageInput {
   message: String!
 }
 
+input operation_request_input {
+  from: String!
+  to: String!
+}
+
+input CreatePostInput {
+  userId: String!
+  post: String
+  image: String
+  video: String
+}
+
+input UpdatePostInput {
+  userId: String!
+  post: String
+  image: String
+  video: String
+}
+
+input CreateCommentInput {
+  comment: String!
+  userId: String!
+  postId: String!
+}
+
+input UpdateCommentInput {
+  comment: String!
+  userId: String!
+  postId: String!
+}
+
+input CreatePostReactionInput {
+  postId: String!
+  userId: String!
+  type: String!
+}
+
+input UpdatePostReactionInput {
+  postId: String!
+  usersId: String!
+  types: String!
+}
+
 type Subscription {
   sendMessageNotification(frindId: String!): UserMessage!
+  addRequest(frindId: String!): String!
+  removeRequest(frindId: String!): String!
+  removeFrind(frindId: String!): String!
+  frindAdded(frindId: String!): String!
 }

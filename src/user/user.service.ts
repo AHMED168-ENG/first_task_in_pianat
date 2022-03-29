@@ -26,6 +26,16 @@ export class UserService {
     });
   }
 
+  async findAllInclude(userIds) {
+    return await this.user.findAll({
+      where: {
+        id: {
+          [Op.in]: userIds,
+        },
+      },
+    });
+  }
+
   async findOne(id: string) {
     var user = await this.user.findOne({
       where: {

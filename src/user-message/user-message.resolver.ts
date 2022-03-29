@@ -28,15 +28,13 @@ export class UserMessageResolver {
     createUserMessageInput: CreateUserMessageInput,
   ): Promise<UserMessage> {
     var message = await this.userMessageService.create(createUserMessageInput);
-    pubSub.publish('sendMessageNotification', {
-      sendMessageNotification: message,
-    }); // علشان اعمل emit لايفنت معين موجود في clint side
+    pubSub.publish('sendMessageNotification', message); // علشان اعمل emit لايفنت معين موجود في clint side
     return message;
   }
 
   @Subscription((returns) => UserMessage, {
-    filter: (payload, vatiabols) =>
-      payload.sendMessageNotification.to === vatiabols.frindId,
+    resolve: (value) => value,
+    filter: (payload, vatiabols) => payload.to === vatiabols.frindId,
   })
   sendMessageNotification(@Args('frindId') frindId: string) {
     return pubSub.asyncIterator('sendMessageNotification');
