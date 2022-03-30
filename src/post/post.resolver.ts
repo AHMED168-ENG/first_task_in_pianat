@@ -1,67 +1,75 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  Subscription,
+} from '@nestjs/graphql';
 import { PostService } from './post.service';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Posts } from './models/posts.model';
-import { UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
-
+import { UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express';
+import { GqlAuthGuard } from 'src/user/guard/jwt_guard';
+import { PubSub } from 'graphql-subscriptions';
+import { User } from 'src/user/model/user.model';
+import { UserRequestService } from 'src/user-request/user-request.service';
+import { UserFrindsService } from 'src/user-frinds/user-frinds.service';
+const pubSub = new PubSub();
 @Resolver(() => Posts)
 export class PostResolver {
   uploadImage;
-  constructor(private readonly postService: PostService) {}
+  constructor(
+    private readonly postService: PostService,
+    private readonly userFrindsService: UserFrindsService,
+  ) {}
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Posts)
-  createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
+  async createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
+    var usersFrind = await this.userFrindsService.findAllFrindes(
+      createPostInput.userId,
+    );
+    await pubSub.publish('addPostNotification', usersFrind);
     return this.postService.create(createPostInput);
   }
 
+  @Subscription(() => [User], {
+    name: 'addPostNotification',
+    resolve: (value) => value,
+    filter: (payload, variabels) =>
+      payload.some((ele) => ele.id == variabels.frindId),
+  })
+  addPostNotification(@Args('frindId') frindId: string) {
+    return pubSub.asyncIterator('addPostNotification');
+  }
+
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Posts], { name: 'findAllPosts' })
   findAll() {
     return this.postService.findAll();
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => Posts, { name: 'findpost' })
   findOne(@Args('userId') userId: string) {
     return this.postService.findOne(userId);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
   updatePost(@Args('updatePostInput') updatePostInput: UpdatePostInput) {
     return this.postService.update(updatePostInput);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
   removePost(@Args('userId') userId: string) {
     return this.postService.remove(userId);
   }
-}
-
-function uploadImage() {
-  return FileInterceptor('photo', {
-    storage: diskStorage({
-      destination: './public/frontEnd/posts/images',
-      filename: (req, file, done) => {
-        console.log(file);
-        const name = file.originalname.split('.')[0];
-        const fileExtName = extname(file.originalname);
-        const randomName = Array(4)
-          .fill(null)
-          .map(() => Math.round(Math.random() * 16).toString(16))
-          .join('');
-        done(null, `${name}-${randomName}${fileExtName}`);
-      },
-    }),
-    fileFilter: (req, file, done) => {
-      if (!file) {
-        throw new Error('الصوره غير موجوده');
-      }
-      if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-        return done(new Error('Only image files are allowed!'), false);
-      }
-      return done(null, true);
-    },
-  });
 }

@@ -35,6 +35,15 @@ export class UserFrindsService {
     return this.userService.findAllInclude(frindesId);
   }
 
+  async getUserFrindIds(userId: string) {
+    var userFrindes = await this.findAllFrindes(userId);
+    var userIds = [];
+    userFrindes.forEach((ele) => {
+      userIds.push(ele.id);
+    });
+    return userIds;
+  }
+
   async findOne(userId: string) {
     return await this.userFrind.findOne({
       where: {

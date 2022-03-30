@@ -21,18 +21,18 @@ export class UserRequest extends Model {
   @Column({ type: DataType.STRING })
   to: string;
 
-  @Field()
+  @Field(() => [String])
   @Default([])
   @Column({ type: DataType.ARRAY(DataType.STRING) })
-  from: string;
+  from: [];
 
-  @Field()
+  @Field(() => [Date])
   @Default([])
   @Column({ type: DataType.ARRAY(DataType.DATE) })
-  date: Date;
+  date: [];
 
-  @Field()
+  @Field(() => [Boolean])
   @Default([])
   @Column({ type: DataType.ARRAY(DataType.BOOLEAN) })
-  isSeen: boolean;
+  isSeen: [];
 }

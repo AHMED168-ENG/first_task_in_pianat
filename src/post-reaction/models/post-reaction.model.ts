@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -7,6 +8,7 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Posts } from 'src/post/models/posts.model';
 
 @ObjectType()
 @Table
@@ -21,15 +23,22 @@ export class PostReaction extends Model {
   @Column
   postId: string;
 
-  @Field()
+  @Field(() => [String])
+  @Default([])
   @Column({ type: DataType.ARRAY(DataType.STRING) })
-  usersId: string;
+  usersId: [];
 
-  @Field()
+  @Field(() => [String])
+  @Default([])
   @Column({ type: DataType.ARRAY(DataType.STRING) })
-  types: string;
+  types: [];
 
-  @Field()
+  @Field(() => [String])
+  @Default([])
   @Column({ type: DataType.ARRAY(DataType.STRING) })
-  createAtLikes: string;
+  createAtLikes: [];
+
+  @Field(() => [Posts])
+  @BelongsTo(() => Posts, 'postId')
+  PostReactionPost: Posts[];
 }

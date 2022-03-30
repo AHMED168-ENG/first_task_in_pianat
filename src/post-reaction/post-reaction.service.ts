@@ -12,9 +12,9 @@ export class PostReactionService {
   async createReactPost(createPostReactionInput) {
     var postReact = await this.findOne(createPostReactionInput.postId);
     if (!postReact) {
-      await this.create(createPostReactionInput);
+      return await this.create(createPostReactionInput);
     } else {
-      await this.createReactInReacts(postReact, createPostReactionInput);
+      return await this.createReactInReacts(postReact, createPostReactionInput);
     }
   }
 
@@ -22,7 +22,7 @@ export class PostReactionService {
     return await this.postReaction.create({
       postId: createPostReactionInput.postId,
       usersId: [createPostReactionInput.userId],
-      types: [createPostReactionInput.types],
+      types: [createPostReactionInput.type],
       createAtLikes: [Date.now()],
     });
   }
@@ -46,7 +46,8 @@ export class PostReactionService {
       postReactData.createAtLikes.push(Date.now());
     }
 
-    await this.update(postReact);
+    await this.update(postReactData);
+    return postReactData;
   }
 
   async findOne(postId: string) {

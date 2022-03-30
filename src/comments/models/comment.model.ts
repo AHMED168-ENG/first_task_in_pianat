@@ -9,6 +9,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Posts } from 'src/post/models/posts.model';
+import { User } from 'src/user/model/user.model';
 
 @ObjectType()
 @Table
@@ -34,4 +35,8 @@ export class Comments extends Model {
   @Field(() => [Posts])
   @BelongsTo(() => Posts, 'postId')
   commentPost: Posts[];
+
+  @Field(() => User)
+  @BelongsTo(() => User, 'userId')
+  commentsUser: User;
 }

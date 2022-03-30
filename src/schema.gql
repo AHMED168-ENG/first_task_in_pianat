@@ -38,8 +38,8 @@ type User {
 type UserFrind {
   id: String!
   userId: String!
-  frindesId: String!
-  date: DateTime!
+  frindesId: [String!]!
+  date: [DateTime!]!
 }
 
 """
@@ -50,17 +50,18 @@ scalar DateTime
 type UserRequest {
   id: String!
   to: String!
-  from: String!
-  date: DateTime!
-  isSeen: Boolean!
+  from: [String!]!
+  date: [DateTime!]!
+  isSeen: [Boolean!]!
 }
 
-type Comments {
+type PostReaction {
   id: String!
-  comment: String!
-  userId: String!
   postId: String!
-  commentPost: [Posts!]!
+  usersId: [String!]!
+  types: [String!]!
+  createAtLikes: [String!]!
+  PostReactionPost: [Posts!]!
 }
 
 type Posts {
@@ -70,14 +71,17 @@ type Posts {
   image: String!
   video: String!
   postComments: [Comments!]!
+  postPostReaction: [PostReaction!]!
+  postUser: User!
 }
 
-type PostReaction {
+type Comments {
   id: String!
+  comment: String!
+  userId: String!
   postId: String!
-  usersId: String!
-  types: String!
-  createAtLikes: String!
+  commentPost: [Posts!]!
+  commentsUser: User!
 }
 
 type Query {
@@ -122,7 +126,7 @@ type Mutation {
   removeComment(id: String!): Boolean!
   createPostReaction(createPostReactionInput: CreatePostReactionInput!): PostReaction!
   updatePostReaction(updatePostReactionInput: UpdatePostReactionInput!): PostReaction!
-  removePostReaction(postId: String!): PostReaction!
+  removeFromPostReact(postId: String!, userId: String!): Boolean!
 }
 
 input CreateUserInput {
@@ -222,4 +226,5 @@ type Subscription {
   removeRequest(frindId: String!): String!
   removeFrind(frindId: String!): String!
   frindAdded(frindId: String!): String!
+  addPostNotification(frindId: String!): [User!]!
 }

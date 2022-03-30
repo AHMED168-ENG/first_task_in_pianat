@@ -3,7 +3,10 @@ import { CommentsService } from './comments.service';
 import { Comments } from './models/comment.model';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
+import { GqlAuthGuard } from 'src/user/guard/jwt_guard';
+import { UseGuards } from '@nestjs/common';
 
+@UseGuards(GqlAuthGuard)
 @Resolver(() => Comments)
 export class CommentsResolver {
   constructor(private readonly commentsService: CommentsService) {}

@@ -7,6 +7,7 @@ export class CommentsService {
   constructor(@InjectModel(Comments) private comments: typeof Comments) {}
 
   async create(createCommentInput) {
+    console.log(createCommentInput);
     return await this.comments.create(createCommentInput);
   }
 

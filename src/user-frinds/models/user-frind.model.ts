@@ -21,13 +21,13 @@ export class UserFrind extends Model {
   @Column({ type: DataType.STRING })
   userId: string;
 
-  @Field()
+  @Field(() => [String])
   @Default([])
   @Column({ type: DataType.ARRAY(DataType.STRING) })
-  frindesId: string;
+  frindesId: [];
 
-  @Field()
+  @Field(() => [Date])
   @Default([])
   @Column({ type: DataType.ARRAY(DataType.DATE) })
-  date: Date;
+  date: [];
 }
