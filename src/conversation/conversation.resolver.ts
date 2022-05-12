@@ -1,7 +1,5 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { Roles } from 'src/modul.exports/Roles';
-import { Role } from 'src/modul.exports/roles.decorator';
 import { GqlAuthGuard } from 'src/user/guard/jwt_guard';
 import { ConversationService } from './conversation.service';
 import { CreateConversationInput } from './dto/create-conversation.input';

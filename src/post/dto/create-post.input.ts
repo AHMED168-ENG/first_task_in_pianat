@@ -1,4 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
+import { UploadImage } from 'src/scalars/upload';
 
 @InputType()
 export class CreatePostInput {
@@ -9,7 +10,7 @@ export class CreatePostInput {
   post: string;
 
   @Field({ nullable: true })
-  image: string;
+  image: UploadImage;
 
   @Field({ nullable: true })
   video: string;

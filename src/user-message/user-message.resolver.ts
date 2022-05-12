@@ -13,8 +13,6 @@ import { UpdateUserMessageInput } from './dto/update-user-message.input';
 import { MyMessagesWithUser } from './dto/MyMessagesWithUser';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/user/guard/jwt_guard';
-import { Role } from 'src/modul.exports/roles.decorator';
-import { Roles } from 'src/modul.exports/Roles';
 import { PubSub } from 'graphql-subscriptions';
 const pubSub = new PubSub();
 

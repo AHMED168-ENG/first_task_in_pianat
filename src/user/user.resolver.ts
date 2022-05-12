@@ -5,8 +5,8 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './model/user.model';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from './guard/jwt_guard';
-import { Role } from 'src/modul.exports/roles.decorator';
-import { Roles } from 'src/modul.exports/Roles';
+import { Roles } from 'modul.exports/Roles';
+import { Role } from 'modul.exports/roles.decorator';
 
 @Resolver(() => User)
 export class UserResolver {

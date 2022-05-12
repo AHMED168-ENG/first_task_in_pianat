@@ -1,5 +1,7 @@
 import { CreatePostInput } from './create-post.input';
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { Upload } from 'graphql-upload';
+import { UploadImage } from 'src/scalars/upload';
 
 @InputType()
 export class UpdatePostInput extends PartialType(CreatePostInput) {
@@ -10,7 +12,7 @@ export class UpdatePostInput extends PartialType(CreatePostInput) {
   post: string;
 
   @Field({ nullable: true })
-  image: string;
+  image: UploadImage;
 
   @Field({ nullable: true })
   video: string;

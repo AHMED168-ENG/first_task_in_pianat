@@ -8,9 +8,8 @@ import {
   HasMany,
 } from 'sequelize-typescript';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Roles } from 'src/modul.exports/Roles';
-import { ConversationModel } from 'src/conversation/model/conversation.model';
 import { UserMessage } from 'src/user-message/model/user-message.model';
+import { Roles } from 'modul.exports/Roles';
 
 @Table
 @ObjectType()

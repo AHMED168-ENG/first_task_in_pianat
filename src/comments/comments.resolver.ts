@@ -11,7 +11,7 @@ import { UseGuards } from '@nestjs/common';
 export class CommentsResolver {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Mutation(() => Comments)
+  @Mutation(() => Comments, { name: 'createComment' })
   createComment(
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
   ) {
@@ -27,14 +27,14 @@ export class CommentsResolver {
     return this.commentsService.findAll(userId, postId, offset);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { name: 'updateComment' })
   updateComment(
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
   ) {
     return this.commentsService.update(updateCommentInput);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { name: 'removeComment' })
   removeComment(@Args('id') id: string) {
     return this.commentsService.remove(id);
   }

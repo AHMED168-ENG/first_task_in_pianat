@@ -39,19 +39,19 @@ type UserFrind {
   id: String!
   userId: String!
   frindesId: [String!]!
-  date: [DateTime!]!
+  date: [Timestamp!]!
 }
 
 """
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
 """
-scalar DateTime
+scalar Timestamp
 
 type UserRequest {
   id: String!
   to: String!
   from: [String!]!
-  date: [DateTime!]!
+  date: [Timestamp!]!
   isSeen: [Boolean!]!
 }
 
@@ -94,8 +94,8 @@ type Query {
   findAllFrindes(userId: String!): [User!]!
   userFrind(userId: String!): UserFrind!
   findAllPosts: [Posts!]!
-  findpost(userId: String!): Posts!
-  FindAllComments(userId: String!, offset: Float!): [Comments!]!
+  findPost(userId: String!): Posts!
+  FindAllComments(userId: String!, offset: Int!): [Comments!]!
   postReaction(userId: String!): PostReaction!
 }
 
@@ -119,6 +119,7 @@ type Mutation {
   acceptRequest(operation_Frindes: operation_request_input!): String!
   changeSeenRequest(to: String!): String!
   createPost(createPostInput: CreatePostInput!): Posts!
+  testing1(file: Upload!): String!
   updatePost(updatePostInput: UpdatePostInput!): Boolean!
   removePost(userId: String!): Boolean!
   createComment(createCommentInput: CreateCommentInput!): Comments!
@@ -185,14 +186,20 @@ input operation_request_input {
 input CreatePostInput {
   userId: String!
   post: String
-  image: String
+  image: UploadImage
   video: String
 }
+
+"""File upload scalar type"""
+scalar UploadImage
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input UpdatePostInput {
   userId: String!
   post: String
-  image: String
+  image: UploadImage
   video: String
 }
 

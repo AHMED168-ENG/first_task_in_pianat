@@ -1,16 +1,14 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  Int,
-  Subscription,
-} from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { PostService } from './post.service';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Posts } from './models/posts.model';
-import { UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  UploadedFile,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import {
   FileFieldsInterceptor,
   FileInterceptor,
@@ -18,8 +16,11 @@ import {
 import { GqlAuthGuard } from 'src/user/guard/jwt_guard';
 import { PubSub } from 'graphql-subscriptions';
 import { User } from 'src/user/model/user.model';
-import { UserRequestService } from 'src/user-request/user-request.service';
 import { UserFrindsService } from 'src/user-frinds/user-frinds.service';
+import { UploadImage } from 'src/scalars/upload';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
+import { createWriteStream } from 'fs';
+
 const pubSub = new PubSub();
 @Resolver(() => Posts)
 export class PostResolver {
@@ -56,7 +57,7 @@ export class PostResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => Posts, { name: 'findpost' })
+  @Query(() => Posts, { name: 'findPost' })
   findOne(@Args('userId') userId: string) {
     return this.postService.findOne(userId);
   }

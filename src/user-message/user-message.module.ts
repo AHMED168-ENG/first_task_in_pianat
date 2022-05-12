@@ -5,7 +5,6 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UserMessage } from './model/user-message.model';
 import { ConversationModel } from 'src/conversation/model/conversation.model';
 import { ConversationService } from 'src/conversation/conversation.service';
-import { ConversationModule } from 'src/conversation/conversation.module';
 import { jwtStrategy } from 'src/user/jwt_strategy';
 
 @Module({
