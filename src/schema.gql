@@ -119,7 +119,6 @@ type Mutation {
   acceptRequest(operation_Frindes: operation_request_input!): String!
   changeSeenRequest(to: String!): String!
   createPost(createPostInput: CreatePostInput!): Posts!
-  testing1(file: Upload!): String!
   updatePost(updatePostInput: UpdatePostInput!): Boolean!
   removePost(userId: String!): Boolean!
   createComment(createCommentInput: CreateCommentInput!): Comments!
@@ -192,9 +191,6 @@ input CreatePostInput {
 
 """File upload scalar type"""
 scalar UploadImage
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 input UpdatePostInput {
   userId: String!
