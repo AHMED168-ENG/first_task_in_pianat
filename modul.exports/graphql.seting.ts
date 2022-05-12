@@ -17,6 +17,11 @@ var onLineUser = {};
         dateScalarMode: 'timestamp',
         numberScalarMode: 'integer',
       },
+      uploads: {
+        maxFileSize: 10000000, // 10 MB
+        maxFiles: 5,
+        path: '/public',
+      },
 
       subscriptions: {
         'subscriptions-transport-ws': {},
