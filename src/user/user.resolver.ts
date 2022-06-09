@@ -3,14 +3,15 @@ import { UserService } from './user.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './model/user.model';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { GqlAuthGuard } from './guard/jwt_guard';
 import { Roles } from 'modul.exports/Roles';
+import { checkingInterseptor } from 'src/guarde.test';
 import { Role } from 'modul.exports/roles.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(private userService: UserService) {}
 
   @UseGuards(GqlAuthGuard)
   @Role(Roles.Admin)

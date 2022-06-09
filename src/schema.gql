@@ -93,6 +93,7 @@ type Query {
   userRequest(id: String!): UserRequest!
   findAllFrindes(userId: String!): [User!]!
   userFrind(userId: String!): UserFrind!
+  testingg: String!
   findAllPosts: [Posts!]!
   findPost(userId: String!): Posts!
   FindAllComments(userId: String!, offset: Int!): [Comments!]!
@@ -119,6 +120,7 @@ type Mutation {
   acceptRequest(operation_Frindes: operation_request_input!): String!
   changeSeenRequest(to: String!): String!
   createPost(createPostInput: CreatePostInput!): Posts!
+  addImage(picture: Upload!): Boolean!
   updatePost(updatePostInput: UpdatePostInput!): Boolean!
   removePost(userId: String!): Boolean!
   createComment(createCommentInput: CreateCommentInput!): Comments!
@@ -185,17 +187,17 @@ input operation_request_input {
 input CreatePostInput {
   userId: String!
   post: String
-  image: UploadImage
+  image: String
   video: String
 }
 
-"""File upload scalar type"""
-scalar UploadImage
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input UpdatePostInput {
   userId: String!
   post: String
-  image: UploadImage
+  image: String
   video: String
 }
 

@@ -1,5 +1,10 @@
-import { ValidationPipe } from '@nestjs/common';
+import {
+  HttpException,
+  NotFoundException,
+  ValidationPipe,
+} from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { graphqlUploadExpress } from 'graphql-upload';
 import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -8,6 +13,7 @@ async function bootstrap() {
       enableDebugMessages: true,
     }),
   );
-  await app.listen(5000);
+  // app.use(graphqlUploadExpress());
+  await app.listen(4000);
 }
 bootstrap();

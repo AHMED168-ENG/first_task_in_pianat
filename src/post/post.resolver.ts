@@ -4,8 +4,14 @@ import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Posts } from './models/posts.model';
 import {
+  BadRequestException,
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
   UploadedFile,
   UploadedFiles,
+  UseFilters,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -17,9 +23,10 @@ import { GqlAuthGuard } from 'src/user/guard/jwt_guard';
 import { PubSub } from 'graphql-subscriptions';
 import { User } from 'src/user/model/user.model';
 import { UserFrindsService } from 'src/user-frinds/user-frinds.service';
-import { UploadImage } from 'src/scalars/upload';
-import { FileUpload, GraphQLUpload } from 'graphql-upload';
+import { GraphQLUpload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
+import { Uploading } from 'src/interface/upload';
+import { testService } from 'src/testing/test.service';
 
 const pubSub = new PubSub();
 @Resolver(() => Posts)
@@ -30,7 +37,7 @@ export class PostResolver {
     private readonly userFrindsService: UserFrindsService,
   ) {}
 
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   @Mutation(() => Posts)
   async createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
     var usersFrind = await this.userFrindsService.findAllFrindes(
@@ -38,6 +45,25 @@ export class PostResolver {
     );
     await pubSub.publish('addPostNotification', usersFrind);
     return this.postService.create(createPostInput);
+  }
+
+  @Mutation(() => Boolean)
+  async addImage(
+    @Args({ name: 'picture', type: () => GraphQLUpload })
+    { createReadStream, filename }: Uploading,
+  ): Promise<Boolean> {
+    console.log("djddjjddj")
+    return new Promise(async (resolver, reject) => {
+      createReadStream()
+        .pipe(createWriteStream(`./uploads/${filename}`))
+        .on('finish', () => resolver(true))
+        .on('error', () => reject(false));
+    });
+  }
+
+  @Query(() => String)
+  testingg(): any {
+    return new BadRequestException();
   }
 
   @Subscription(() => [User], {

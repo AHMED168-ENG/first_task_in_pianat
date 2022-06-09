@@ -7,6 +7,13 @@ import { jwtStrategy } from './jwt_strategy';
 
 @Module({
   imports: [SequelizeModule.forFeature([User])],
-  providers: [UserResolver, UserService, jwtStrategy],
+  providers: [
+    UserResolver,
+    {
+      provide: UserService,
+      useClass: UserService,
+    },
+    jwtStrategy,
+  ],
 })
 export class UserModule {}

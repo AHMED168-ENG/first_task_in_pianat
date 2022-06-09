@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { configrationSeting } from './configration.seting';
 
 @Module({
   imports: [
-    configrationSeting,
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.HOST,
