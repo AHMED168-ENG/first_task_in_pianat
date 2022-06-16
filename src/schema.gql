@@ -120,7 +120,7 @@ type Mutation {
   acceptRequest(operation_Frindes: operation_request_input!): String!
   changeSeenRequest(to: String!): String!
   createPost(createPostInput: CreatePostInput!): Posts!
-  addImage(picture: Upload!): Boolean!
+  coverPhoto(file: Upload!): Int!
   updatePost(updatePostInput: UpdatePostInput!): Boolean!
   removePost(userId: String!): Boolean!
   createComment(createCommentInput: CreateCommentInput!): Comments!

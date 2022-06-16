@@ -13,6 +13,8 @@ async function bootstrap() {
       enableDebugMessages: true,
     }),
   );
+
+  app.use(graphqlUploadExpress({ maxFileSize: 2 * 1000 * 1000 }));
   // app.use(graphqlUploadExpress());
   await app.listen(4000);
 }

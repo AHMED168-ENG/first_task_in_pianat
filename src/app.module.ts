@@ -14,6 +14,7 @@ import { PostReactionModule } from './post-reaction/post-reaction.module';
 import { RolesGuard } from 'modul.exports/role.guard';
 import { sequelizeSeting } from 'modul.exports/sequelize.seting';
 import { GraphQLSeting } from 'modul.exports/graphql.seting';
+import { GraphQLModule } from '@nestjs/graphql';
 
 @Module({
   imports: [

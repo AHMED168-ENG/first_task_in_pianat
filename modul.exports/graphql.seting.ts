@@ -8,6 +8,7 @@ var onLineUser = {};
 @Module({
   imports: [
     GraphQLModule.forRoot({
+      // uploads: false,
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       buildSchemaOptions: {
@@ -15,7 +16,7 @@ var onLineUser = {};
         numberScalarMode: 'integer',
       },
       uploads: {
-        maxFileSize: 10000000, // 10 MB
+        maxFileSize: 10000000000, // 10 MB
         maxFiles: 5,
         path: '/public',
       },
