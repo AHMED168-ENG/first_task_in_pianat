@@ -6,6 +6,8 @@ import {
   Subscription,
   Int,
 } from '@nestjs/graphql';
+import * as fs from 'fs/promises';
+
 import { PostService } from './post.service';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
@@ -30,10 +32,9 @@ import { GqlAuthGuard } from 'src/user/guard/jwt_guard';
 import { PubSub } from 'graphql-subscriptions';
 import { User } from 'src/user/model/user.model';
 import { UserFrindsService } from 'src/user-frinds/user-frinds.service';
-import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { createWriteStream } from 'fs';
 import { testService } from 'src/testing/test.service';
-import { FileUploading } from 'src/interface/upload';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 const pubSub = new PubSub();
 @Resolver(() => Posts)
@@ -54,42 +55,38 @@ export class PostResolver {
     return this.postService.create(createPostInput);
   }
 
-  @Mutation(() => Int, { name: 'coverPhoto' })
-  async uploadCoverPhoto(
-    @Args('file', { type: () => GraphQLUpload }) file: FileUpload,
-  ): Promise<number> {
+  @Mutation(() => Boolean)
+  async uploadPhoto(
+    @Args('files', { type: () => GraphQLUpload }) files: FileUpload[],
+  ): Promise<boolean> {
     try {
-      console.log('djdhdhdh');
-      const { createReadStream } = file;
+      console.log(await files);
+      // const { createReadStream } = file;
+      // console.log(createReadStream());
+      // const stream = createReadStream();
+      // const chunks = [];
 
-      const stream = createReadStream();
-      const chunks = [];
+      // var buffer = await new Promise<Buffer>((resolve, reject) => {
+      //   let buffer: Buffer;
 
-      var buffer = await new Promise<Buffer>((resolve, reject) => {
-        let buffer: Buffer;
+      //   stream.on('data', function (chunk) {
+      //     chunks.push(chunk);
+      //   });
 
-        stream.on('data', function (chunk) {
-          chunks.push(chunk);
-        });
+      //   stream.on('end', function () {
+      //     buffer = Buffer.concat(chunks);
+      //     resolve(buffer);
+      //   });
 
-        stream.on('end', function () {
-          buffer = Buffer.concat(chunks);
-          resolve(buffer);
-        });
+      //   stream.on('error', reject);
+      // });
 
-        stream.on('error', reject);
-      });
+      // buffer = Buffer.concat(chunks);
+      // await fs.writeFile('./src/public/' + file.filename, buffer);
 
-      buffer = Buffer.concat(chunks);
-
-      const base64 = buffer.toString('base64');
-      // If you want to store the file, this is one way of doing
-      // it, as you have the file in-memory as Buffer
-
-      console.log(base64);
-      return base64.length;
+      return true;
     } catch (err) {
-      return 0;
+      return err;
     }
   }
 

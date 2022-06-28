@@ -4,6 +4,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ApolloServer } from 'apollo-server-express';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { AppModule } from './app.module';
 async function bootstrap() {
@@ -14,8 +15,7 @@ async function bootstrap() {
     }),
   );
 
-  app.use(graphqlUploadExpress({ maxFileSize: 2 * 1000 * 1000 }));
-  // app.use(graphqlUploadExpress());
+  app.use(graphqlUploadExpress({ maxFileSize: 2000000, maxFiles: 10 }));
   await app.listen(4000);
 }
 bootstrap();

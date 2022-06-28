@@ -3,22 +3,17 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import * as jwt from 'jsonwebtoken';
+import { GraphQLUpload } from 'graphql-upload';
 
 var onLineUser = {};
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      // uploads: false,
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       buildSchemaOptions: {
         dateScalarMode: 'timestamp',
         numberScalarMode: 'integer',
-      },
-      uploads: {
-        maxFileSize: 10000000000, // 10 MB
-        maxFiles: 5,
-        path: '/public',
       },
 
       subscriptions: {
